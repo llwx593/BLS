@@ -23,7 +23,7 @@ testlabel = np.double(data['test_y'])
 
 N1 = 10
 N2 = 10
-N3 = 11000
+N3 = 2000
 s = 0.8
 C = 2**-30
 
