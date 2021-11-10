@@ -53,10 +53,10 @@ class BaseBls:
 
     def get_enhance_weight(self):
         if self.N1 * self.N2 >= self.N3:
-            np.random.seed(6797325)
+            np.random.seed(67797325)
             return LA.orth(2 * np.random.randn(self.N2 * self.N1 + 1, self.N3)) - 1
         else:
-            np.random.seed(6797325)
+            np.random.seed(67797325)
             return LA.orth(2 * np.random.randn(self.N2 * self.N1 + 1, self.N3).T - 1).T
         
     def pinv(self, A):
@@ -76,7 +76,7 @@ class BaseBls:
             np.random.seed(i)
             feature_weight = 2 * np.random.randn(train_x.shape[1]+1, self.N1) - 1
             feature_window = np.dot(x_bias, feature_weight)
-            scaler1 = preprocessing.MinMaxScaler(feature_range=(0, 1)).fit(feature_weight)
+            scaler1 = preprocessing.MinMaxScaler(feature_range=(0, 1)).fit(feature_window)
             preprocess_feature = scaler1.transform(feature_window)
             sparse_feature_weight = self.sparse_autoencoder(preprocess_feature, x_bias)
             self.feature_weight_list.append(sparse_feature_weight)
