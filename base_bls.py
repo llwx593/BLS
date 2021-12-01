@@ -85,10 +85,6 @@ class BaseBls:
         W = np.dot(A_pinv, Y)
         return W
 
-    def show(self):
-        print("mapping layer output")
-        print(self.mapping_layer_output)
-
     def trainpre_process(self, train_x, batch_size, flag):
         train_x = preprocessing.scale(train_x, axis=1)
         x_bias = np.hstack([train_x, 0.1 * np.ones((train_x.shape[0], 1))])
@@ -120,8 +116,6 @@ class BaseBls:
             self.preprocess_feature = scaler1.transform(self.temp_mlayer_output)
             self.train_index = 0
         elif (self.train_index == self.train_num) and (not flag):
-            print("before standard")
-            print(self.mapping_layer_output)
             for i in range(self.N2):
                 self.mapping_layer_output[:, self.N1*i:self.N1*(i+1)] = self.standardization(self.mapping_layer_output[:, self.N1*i:self.N1*(i+1)], i)
                 self.train_index = 0

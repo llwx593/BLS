@@ -5,12 +5,13 @@ import time
 from utils import show_mnist_accuracy
 from keras.preprocessing.image import ImageDataGenerator
 import math
+import sys
 
 N1 = 10
 N2 = 10
-N3 = 500
+N3 = 11000
 s = 0.8
-C = 2**-30
+
 
 def test_mnist(file_path=None):
     dataFile = file_path
@@ -42,7 +43,6 @@ def test_mnist(file_path=None):
     train_acc = show_mnist_accuracy(train_out, trainlabel)
     print('Training accurate is' ,train_acc*100,'%')
     print('Training time is ',train_time,'s')
-    bls.show()
 
     # print("------BLS_BASE------")
     # bls = BaseBls(N1, N2, N3, s, C)
@@ -54,18 +54,21 @@ def test_mnist(file_path=None):
     # print('Training accurate is' ,train_acc*100,'%')
     # print('Training time is ',train_time,'s')
 
-    # bls.eval()
-    # start_time = time.time()
-    # predict_out = bls.forward(testdata)
-    # end_time = time.time()
-    # test_time = end_time - start_time
-    # test_acc = show_mnist_accuracy(predict_out, testlabel)
-    # print('Testing accurate is' ,test_acc * 100,'%')
-    # print('Testing time is ',test_time,'s')
+    bls.eval()
+    start_time = time.time()
+
+    bls.evalpre_process(testdata, 10000)
+
+    predict_out = bls.forward()
+    end_time = time.time()
+    test_time = end_time - start_time
+    test_acc = show_mnist_accuracy(predict_out, testlabel)
+    print('Testing accurate is' ,test_acc * 100,'%')
+    print('Testing time is ',test_time,'s')
     return
 
 
-def test_messidor(dataset="messidor", image_size=512, batch_size=16):
+def test_dataset(dataset="DDR", image_size=512, batch_size=128, l2_c=2**-30):
     dataParam={'messidor': [957,243,2,'./datasets/messidor/train','./datasets/messidor/test'],
                'kaggle': [30000,5126,5,'./datasets/kaggle/train','./datasets/kaggle/valid'],
                'DDR':   [9851,2503,5,'./datasets/DDR/train','./datasets/DDR/valid']}
@@ -178,5 +181,11 @@ def test_messidor(dataset="messidor", image_size=512, batch_size=16):
     return
 
 if __name__ == "__main__":
-    #test_mnist("./datasets/mnist.mat")
-    test_messidor()
+    # test_mnist("./datasets/mnist.mat")
+    # test_dataset(dataset="messidor", batch_size=64)
+
+    # index = int(sys.argv[1]) #2**-30
+    # C = math.pow(10, -1 * index)
+    # print("Now Regularization Coefficient is ", C)
+    # test_dataset(dataset="DDR", batch_size=128, l2_c=C)
+    test_dataset(dataset="DDR", batch_size=128)

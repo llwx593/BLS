@@ -2,3 +2,5 @@ __pycache__/
 mnist.mat
 /datasets/mnist_datasets/
 /datasets/messidor/
+/datasets/DDR/
+*.log
